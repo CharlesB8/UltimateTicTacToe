@@ -1,6 +1,6 @@
-import './App.css'
+import './UltimateTicTacToe.css'
 
-function App() {
+function UltimateTicTacToe() {
 
   return (
       <div>
@@ -9,7 +9,7 @@ function App() {
               <Square />
           </div>
       </div>
-  )
+  );
 }
 
 function Square() {
@@ -17,4 +17,4 @@ function Square() {
 }
 
 
-export default App
+export default UltimateTicTacToe
