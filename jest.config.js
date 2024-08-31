@@ -1,6 +1,7 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
 export default {
   testEnvironment: "jsdom",  // Use jsdom if you're testing React components
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'], // Pointing to the setup file
   transform: {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.js$": "babel-jest",  // Add this line to handle ES modules
