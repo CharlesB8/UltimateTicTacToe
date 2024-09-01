@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",  // or "react" if you're using React 16 or below
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "es6"],
+    "strict": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules"]
 }

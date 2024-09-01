@@ -13,11 +13,16 @@ function UltimateTicTacToe() {
   );
 }
 
-function Square({value, onSquareClick}) {
+interface SquareProps {
+    value: string;
+    onSquareClick: () => void;
+}
+
+function Square({ value, onSquareClick }: SquareProps) {
     return (
         <button
-            className="square"
-            data-testid="square"
+            className='square'
+            data-testid='square'
             onClick={onSquareClick}
         >
             {value}
@@ -29,30 +34,30 @@ function GameBoard() {
     const [xIsNext, setXIsNext] = useState(true);
     const [squares, setSquares] = useState(Array(9).fill(null))
 
-    function handleClick(i) {
+    function handleClick(i: number) {
         const nextSquares = squares.slice();
         if (xIsNext) {
-            nextSquares[i] = "X";
+            nextSquares[i] = 'X';
         } else {
-            nextSquares[i] = "O";
+            nextSquares[i] = 'O';
         }
         setSquares(nextSquares);
         setXIsNext(!xIsNext);
     }
 
     return (
-        <div className="board">
-            <div className="flex">
+        <div className='board'>
+            <div className='flex'>
                 <Square value={squares[0]} onSquareClick={() => handleClick(0)}/>
                 <Square value={squares[1]} onSquareClick={() => handleClick(1)}/>
                 <Square value={squares[2]} onSquareClick={() => handleClick(2)}/>
             </div>
-            <div className="flex">
+            <div className='flex'>
                 <Square value={squares[3]}  onSquareClick={() => handleClick(3)}/>
                 <Square value={squares[4]}  onSquareClick={() => handleClick(4)}/>
                 <Square value={squares[5]}  onSquareClick={() => handleClick(5)}/>
             </div>
-            <div className="flex">
+            <div className='flex'>
                 <Square value={squares[6]}  onSquareClick={() => handleClick(6)}/>
                 <Square value={squares[7]}  onSquareClick={() => handleClick(7)}/>
                 <Square value={squares[8]}  onSquareClick={() => handleClick(8)}/>
