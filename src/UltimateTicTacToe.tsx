@@ -5,7 +5,15 @@ import { useState } from 'react';
 function UltimateTicTacToe() {
 
   return (
-      <div>
+      <div className="inline-grid grid-cols-3 grid-rows-3 gap-1">
+          <GameBoard />
+          <GameBoard />
+          <GameBoard />
+          <GameBoard />
+          <GameBoard />
+          <GameBoard />
+          <GameBoard />
+          <GameBoard />
           <GameBoard />
       </div>
   );
@@ -13,15 +21,24 @@ function UltimateTicTacToe() {
 
 interface SquareProps {
     value: string;
+    disabled: boolean;
     onSquareClick: () => void;
 }
 
-function Square({ value, onSquareClick }: SquareProps) {
+function Square({ value, disabled, onSquareClick }: SquareProps) {
+    const [isDisabled, setIsDisabled] = useState(false);
+
+    const handleClick = () => {
+        onSquareClick();
+        setIsDisabled(true);
+    }
+
     return (
         <button
             className='square hover:bg-orange-400'
             data-testid='square'
-            onClick={onSquareClick}
+            onClick={handleClick}
+            disabled={disabled || isDisabled}
         >
             {value}
         </button>
@@ -72,7 +89,7 @@ function GameBoard() {
 
 
     return (
-        <>
+        <div>
         <div className='status' data-testid='status'>{status}</div>
         <div className='flex justify-center'>
             <div className='board'>
@@ -94,7 +111,7 @@ function GameBoard() {
                 </div>
             </div>
             <ResetGame />
-        </>
+        </div>
     )
 }
 
