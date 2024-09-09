@@ -1,4 +1,5 @@
-import './UltimateTicTacToe.css'
+import './UltimateTicTacToe.css';
+import './index.css';
 import { useState } from 'react';
 
 function UltimateTicTacToe() {
@@ -18,7 +19,7 @@ interface SquareProps {
 function Square({ value, onSquareClick }: SquareProps) {
     return (
         <button
-            className='square'
+            className='square hover:bg-orange-400'
             data-testid='square'
             onClick={onSquareClick}
         >
