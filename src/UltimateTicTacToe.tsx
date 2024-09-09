@@ -5,7 +5,6 @@ function UltimateTicTacToe() {
 
   return (
       <div>
-          <h1 className='text-orange-500 text-5xl'>something</h1>
           <GameBoard />
       </div>
   );
@@ -29,8 +28,9 @@ function Square({ value, onSquareClick }: SquareProps) {
 }
 
 function GameBoard() {
+    const initialBoard = Array(9).fill(null)
     const [xIsNext, setXIsNext] = useState(true);
-    const [squares, setSquares] = useState(Array(9).fill(null))
+    const [squares, setSquares] = useState(initialBoard)
 
     function handleClick(i: number) {
         if (squares[i] || calculateWinner(squares)) {
@@ -53,6 +53,20 @@ function GameBoard() {
         status = "Winner: " + winner;
     } else {
         status = "Next Player: " + (xIsNext ? "X" : "O")
+    }
+
+    function ResetGame() {
+        function reset() {
+            setSquares(initialBoard);
+            setXIsNext(true)
+        }
+
+        return (
+            <button
+                data-testid='reset'
+                onClick={reset}
+            >Reset Game</button>
+        )
     }
 
 
@@ -78,6 +92,7 @@ function GameBoard() {
                     </div>
                 </div>
             </div>
+            <ResetGame />
         </>
     )
 }
