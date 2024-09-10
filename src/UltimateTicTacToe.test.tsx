@@ -63,4 +63,22 @@ test('Clicking reset game resets the game', async () => {
 
     expect(squares[0].textContent).toBe('')
     expect(squares[3].textContent).toBe('')
-})
+});
+
+test('It is announced if the game ends in a tie', () => {
+    const squares = screen.getAllByTestId('square');
+
+    fireEvent.click(squares[0]); // X's turn
+    fireEvent.click(squares[3]); // O's turn
+    fireEvent.click(squares[1]); // X's turn
+    fireEvent.click(squares[4]); // O's turn
+    fireEvent.click(squares[5]); // X's turn
+    fireEvent.click(squares[2]); // O's turn
+    fireEvent.click(squares[6]); // X's turn
+    fireEvent.click(squares[7]); // O's turn
+    fireEvent.click(squares[8]); // X's turn
+
+    const status = screen.getByTestId('status');
+    expect(status.textContent).toBe("Cat's game! Better luck next time. Try again?")
+
+});

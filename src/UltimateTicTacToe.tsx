@@ -52,6 +52,8 @@ function GameBoard() {
     let status;
     if (winner) {
         status = "Winner: " + winner;
+    } else if (winner === 0) {
+        status = "Cat's game! Better luck next time. Try again?"
     } else {
         status = "Next Player: " + (xIsNext ? "X" : "O")
     }
@@ -119,5 +121,10 @@ function calculateWinner(squares: Array<number>) {
             return squares[a];
         }
     }
+
+    if (!squares.some((num) => num === null)) {
+        return 0;
+    }
+
     return null;
 }
