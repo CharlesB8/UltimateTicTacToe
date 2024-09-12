@@ -1,7 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import UltimateTicTacToe from './UltimateTicTacToe.tsx'
+import TicTacToe from './TicTacToe.tsx'
 import './index.css'
+import UltimateTicTacToe from "./UltimateTicTacToe.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
