@@ -1,6 +1,6 @@
 import './UltimateTicTacToe.css';
 import './index.css';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
 function UltimateTicTacToe() {
 
@@ -14,6 +14,20 @@ function UltimateTicTacToe() {
 interface SquareProps {
     value: string;
     onSquareClick: () => void;
+}
+
+interface WinCounterProps {
+    xWins: number;
+    oWins: number;
+}
+
+function WinCounter({ xWins, oWins }: WinCounterProps) {
+    return (
+        <>
+            <div> X wins: {xWins} </div>
+            <div> O wins: {oWins} </div>
+        </>
+    )
 }
 
 function Square({ value, onSquareClick }: SquareProps) {
@@ -32,6 +46,8 @@ function GameBoard() {
     const initialBoard = Array(9).fill(null)
     const [xIsNext, setXIsNext] = useState(true);
     const [squares, setSquares] = useState(initialBoard)
+    const [xWins, setXWins] = useState(0);
+    const [oWins, setOWins] = useState(0);
 
     function handleClick(i: number) {
         if (squares[i] || calculateWinner(squares)) {
@@ -50,13 +66,23 @@ function GameBoard() {
 
     const winner = calculateWinner(squares);
     let status;
+
     if (winner) {
         status = "Winner: " + winner;
-    } else if (winner === 0) {
+    } else if (winner === "") {
         status = "Cat's game! Better luck next time. Try again?"
     } else {
         status = "Next Player: " + (xIsNext ? "X" : "O")
     }
+
+    useEffect(() => {
+        if (winner === "X") {
+            setXWins((prevXWins) => prevXWins + 1);
+        } else if (winner === "O") {
+            setOWins((prevOWins) => prevOWins + 1);
+        }
+    }, [winner]);
+
 
     function ResetGame() {
         function reset() {
@@ -96,6 +122,7 @@ function GameBoard() {
                 </div>
             </div>
             <ResetGame />
+            <WinCounter xWins={xWins} oWins={oWins} />
         </>
     )
 }
@@ -103,7 +130,7 @@ function GameBoard() {
 
 export default UltimateTicTacToe
 
-function calculateWinner(squares: Array<number>) {
+function calculateWinner(squares: Array<string | null>) {
     const winningCombos = [
         [0, 1, 2],
         [3, 4, 5],
@@ -122,8 +149,8 @@ function calculateWinner(squares: Array<number>) {
         }
     }
 
-    if (!squares.some((num) => num === null)) {
-        return 0;
+    if (!squares.includes(null)) {
+        return "";
     }
 
     return null;
