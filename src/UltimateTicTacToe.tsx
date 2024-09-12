@@ -3,46 +3,6 @@ import './index.css';
 import {useEffect, useState} from 'react';
 
 function UltimateTicTacToe() {
-
-  return (
-      <div>
-          <GameBoard />
-      </div>
-  );
-}
-
-interface SquareProps {
-    value: string;
-    onSquareClick: () => void;
-}
-
-interface WinCounterProps {
-    xWins: number;
-    oWins: number;
-}
-
-function WinCounter({ xWins, oWins }: WinCounterProps) {
-    return (
-        <>
-            <div> X wins: {xWins} </div>
-            <div> O wins: {oWins} </div>
-        </>
-    )
-}
-
-function Square({ value, onSquareClick }: SquareProps) {
-    return (
-        <button
-            className='square hover:bg-orange-400'
-            data-testid='square'
-            onClick={onSquareClick}
-        >
-            {value}
-        </button>
-    );
-}
-
-function GameBoard() {
     const initialBoard = Array(9).fill(null)
     const [xIsNext, setXIsNext] = useState(true);
     const [squares, setSquares] = useState(initialBoard)
@@ -101,9 +61,9 @@ function GameBoard() {
 
     return (
         <>
-        <div className='status' data-testid='status'>{status}</div>
-        <div className='flex justify-center'>
-            <div className='board'>
+            <div className='status' data-testid='status'>{status}</div>
+            <div className='flex justify-center'>
+                <div className='board'>
                     <div className='flex'>
                         <Square value={squares[0]} onSquareClick={() => handleClick(0)}/>
                         <Square value={squares[1]} onSquareClick={() => handleClick(1)}/>
@@ -125,6 +85,37 @@ function GameBoard() {
             <WinCounter xWins={xWins} oWins={oWins} />
         </>
     )
+}
+
+interface SquareProps {
+    value: string;
+    onSquareClick: () => void;
+}
+
+interface WinCounterProps {
+    xWins: number;
+    oWins: number;
+}
+
+function WinCounter({ xWins, oWins }: WinCounterProps) {
+    return (
+        <>
+            <div> X wins: {xWins} </div>
+            <div> O wins: {oWins} </div>
+        </>
+    )
+}
+
+function Square({ value, onSquareClick }: SquareProps) {
+    return (
+        <button
+            className='square hover:bg-orange-400'
+            data-testid='square'
+            onClick={onSquareClick}
+        >
+            {value}
+        </button>
+    );
 }
 
 
