@@ -2,7 +2,7 @@ import {fireEvent, render, screen} from '@testing-library/react';
 import TicTacToe from "./TicTacToe";
 
 beforeEach(() => {
-        render(<TicTacToe/>)
+        render(<TicTacToe xIsNext={}/>)
 });
 
 test('renders the tic tac toe board', () => {

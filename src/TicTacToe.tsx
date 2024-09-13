@@ -1,10 +1,14 @@
 import './TicTacToe.css';
 import './index.css';
 import {useEffect, useState} from 'react';
+//
+// interface TicTacToeProps {
+//     xIsNext: boolean
+//     setXIsNext: () => void
+// }
 
-function TicTacToe() {
+function TicTacToe({ xIsNext, setXIsNext }) {
     const initialBoard = Array(9).fill(null)
-    const [xIsNext, setXIsNext] = useState(true);
     const [squares, setSquares] = useState(initialBoard)
     const [xWins, setXWins] = useState(0);
     const [oWins, setOWins] = useState(0);
@@ -61,7 +65,6 @@ function TicTacToe() {
 
     return (
         <div>
-            <div className='status' data-testid='status'>{status}</div>
             <div className='flex justify-center' data-testid='tictactoe-board'>
                 <div className='board border-4 border-black'>
                     <div className='flex'>
@@ -81,8 +84,6 @@ function TicTacToe() {
                     </div>
                 </div>
             </div>
-            <ResetGame />
-            <WinCounter xWins={xWins} oWins={oWins} />
         </div>
     )
 }
