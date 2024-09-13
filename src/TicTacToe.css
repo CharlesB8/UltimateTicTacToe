@@ -9,21 +9,6 @@
   text-align: center;
 }
 
-.square {
-  background: #ffffff;
-  border: 1px solid #000000;
-  float: left;
-  font-size: 40px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 60px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 60px;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
