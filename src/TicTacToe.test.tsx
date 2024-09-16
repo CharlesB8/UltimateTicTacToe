@@ -1,12 +1,12 @@
 import {fireEvent, render, screen} from '@testing-library/react';
-import UltimateTicTacToe from "./UltimateTicTacToe";
+import TicTacToe from "./TicTacToe";
 
 beforeEach(() => {
-        render(<UltimateTicTacToe/>)
+        render(<TicTacToe/>)
 });
 
 test('renders the tic tac toe board', () => {
-    const element= render(<UltimateTicTacToe />);
+    const element= render(<TicTacToe />);
     expect(element).toBeTruthy();
 });
 
