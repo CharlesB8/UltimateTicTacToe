@@ -1,10 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import TicTacToe from './TicTacToe.tsx'
+import App from './App'
 import './index.css'
+import {BrowserRouter} from "react-router-dom";
 
 createRoot(document.getElementById('root')!).render(
+
   <StrictMode>
-    <TicTacToe />
+      <BrowserRouter>
+          <App />
+      </BrowserRouter>
   </StrictMode>,
 )

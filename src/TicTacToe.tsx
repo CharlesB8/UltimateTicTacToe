@@ -4,16 +4,19 @@ import {useEffect, useState} from 'react';
 import ResetButton from "./components/ResetButton";
 import Board from "./components/Board";
 import WinCounter from "./components/WinCounter";
+import calculateTicTacToeWinner from "./calculateTicTacToeWinner";
 
 function TicTacToe() {
-    const initialBoard = Array(9).fill(null)
+    const initialBoard = Array(9).fill(null);
     const [xIsNext, setXIsNext] = useState(true);
-    const [squares, setSquares] = useState(initialBoard)
+    const [squares, setSquares] = useState(initialBoard);
     const [xWins, setXWins] = useState(0);
     const [oWins, setOWins] = useState(0);
 
+    const winner = calculateTicTacToeWinner(squares);
+
     function handleClick(i: number) {
-        if (squares[i] || calculateWinner(squares)) {
+        if (squares[i] || winner) {
             return;
         }
         const nextSquares = squares.slice();
@@ -27,7 +30,6 @@ function TicTacToe() {
         setXIsNext(!xIsNext);
     }
 
-    const winner = calculateWinner(squares);
     let status;
 
     if (winner) {
@@ -63,29 +65,3 @@ function TicTacToe() {
 
 
 export default TicTacToe
-
-function calculateWinner(squares: Array<string | null>) {
-    const winningCombos = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
-
-    for (let i = 0; i < winningCombos.length; i++) {
-        const [a, b, c] = winningCombos[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
-        }
-    }
-
-    if (!squares.includes(null)) {
-        return "";
-    }
-
-    return null;
-}
