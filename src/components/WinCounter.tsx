@@ -6,8 +6,8 @@ interface WinCounterProps {
 function WinCounter({ xWins, oWins }: WinCounterProps) {
     return (
         <>
-            <div> X wins: {xWins} </div>
-            <div> O wins: {oWins} </div>
+            <div data-testid="x-wins"> X wins: {xWins} </div>
+            <div data-testid="o-wins"> O wins: {oWins} </div>
         </>
     )
 }
