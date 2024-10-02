@@ -2,7 +2,7 @@ import Square from './Square'
 import classNames from 'classnames'
 
 interface BoardProps {
-    squares: Array<string>
+    squares: Array<string | null>
     onSquareClick: (square: number) => void
     disabled?: boolean
 }
