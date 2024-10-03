@@ -43,27 +43,49 @@ test('A box in any given sub board can only be claimed once', () => {
 
 test('A after a sub board is won it cant be played', () => {
     const subBoards = screen.getAllByTestId('tictactoe-board');
-    const subBoard1 = within(subBoards[0]).getAllByTestId('square')
+    const subBoard = within(subBoards[0]).getAllByTestId('square')
 
-    fireEvent.click(subBoard1[0]);
-    fireEvent.click(subBoard1[3]);
-    fireEvent.click(subBoard1[1]);
-    fireEvent.click(subBoard1[4]);
-    fireEvent.click(subBoard1[2]);
-    fireEvent.click(subBoard1[5]);
-    expect(subBoard1[5].textContent).toBe('')
+    xWinsBoard(subBoard)
+    fireEvent.click(subBoard[5]);
+    expect(subBoard[5].textContent).toBe('')
 });
 
 test("Per board won is tracked", () => {
     const subBoards = screen.getAllByTestId('tictactoe-board');
-    const subBoard1 = within(subBoards[0]).getAllByTestId('square')
+    const subBoard = within(subBoards[0]).getAllByTestId('square')
 
-    fireEvent.click(subBoard1[0]);
-    fireEvent.click(subBoard1[3]);
-    fireEvent.click(subBoard1[1]);
-    fireEvent.click(subBoard1[4]);
-    fireEvent.click(subBoard1[2]);
-    fireEvent.click(subBoard1[5]);
+    xWinsBoard(subBoard);
     const status = screen.getByTestId("x-wins")
     expect(status.textContent).toContain("1")
 });
+
+test("X can win the ultimate board", () => {
+    const status = screen.getByTestId("x-wins")
+    // const ultimateWinner = screen.getByTestId("ultimate-winner")
+    const subBoards = screen.getAllByTestId('tictactoe-board');
+    const subBoard1 = within(subBoards[0]).getAllByTestId('square')
+    const subBoard2 = within(subBoards[1]).getAllByTestId('square')
+    const subBoard3 = within(subBoards[2]).getAllByTestId('square')
+    const subBoard4 = within(subBoards[3]).getAllByTestId('square')
+
+    xWinsBoard(subBoard1)
+    expect(status.textContent).toContain("1")
+
+    fireEvent.click(subBoard4[1]); // Play O somewhere
+    xWinsBoard(subBoard2)
+    expect(status.textContent).toContain("2")
+
+    fireEvent.click(subBoard4[2]); // Play O somewhere
+    xWinsBoard(subBoard3)
+    expect(status.textContent).toContain("3")
+
+    // expect(ultimateWinner)
+});
+
+function xWinsBoard(subBoard: HTMLElement[]) {
+    fireEvent.click(subBoard[0]);
+    fireEvent.click(subBoard[3]);
+    fireEvent.click(subBoard[1]);
+    fireEvent.click(subBoard[4]);
+    fireEvent.click(subBoard[2]);
+}

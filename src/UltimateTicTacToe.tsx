@@ -19,6 +19,10 @@ interface BoardWithCachedWinner {
 
 type BoardType = Array<"X" | "O" | null>
 
+// function simplifiedUltimateBoard(Board) {
+//
+// }
+
 function UltimateTicTacToe() {
     const [xIsNext, setXIsNext] = useState(true);
     const [board, setBoard] = useState<Array<BoardWithCachedWinner>>(createBoard());
@@ -27,6 +31,9 @@ function UltimateTicTacToe() {
 
 
     function handleClick(boardIndex: number, squareIndex: number) {
+
+        // const ultimateWinner = calculateTicTacToeWinner(simplifiedUltimateBoard(Board))
+
         const nextUltBoard = board
         const nextBoard = board.map(subBoard => subBoard.board.slice());
 
