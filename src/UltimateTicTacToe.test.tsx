@@ -39,6 +39,7 @@ test('A box in any given sub board can only be claimed once', () => {
 
     fireEvent.click(subBoard1[0]); // O attempts to claim X's square
     expect(subBoard1[0].textContent).toBe('X')
+    // something to commit
 });
 
 test('A after a sub board is won it cant be played', () => {
