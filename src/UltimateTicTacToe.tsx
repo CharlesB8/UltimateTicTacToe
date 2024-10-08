@@ -1,5 +1,5 @@
 import Board from "./components/Board";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import calculateTicTacToeWinner from "./calculateTicTacToeWinner";
 import WinCounter from "./components/WinCounter";
 
@@ -19,20 +19,28 @@ interface BoardWithCachedWinner {
 
 type BoardType = Array<"X" | "O" | null>
 
-// function simplifiedUltimateBoard(Board) {
-//
-// }
+function simplifiedUltimateBoard(board: BoardWithCachedWinner[]) {
+    return board.map(subBoard =>  {
+        if (!subBoard.winner) {
+            return null;
+        } else {
+            return subBoard.winner;
+        }
+    });
+}
 
-function UltimateTicTacToe() {
+interface UltimateTicTacToeProps {
+    disabled?: boolean
+}
+
+function UltimateTicTacToe({ disabled = false }: UltimateTicTacToeProps) {
     const [xIsNext, setXIsNext] = useState(true);
     const [board, setBoard] = useState<Array<BoardWithCachedWinner>>(createBoard());
     const [xWins, setXWins] = useState(0);
     const [oWins, setOWins] = useState(0);
-
+    const [ultimateWinner, setUltimateWinner] = useState<string | null>(null);
 
     function handleClick(boardIndex: number, squareIndex: number) {
-
-        // const ultimateWinner = calculateTicTacToeWinner(simplifiedUltimateBoard(Board))
 
         const nextUltBoard = board
         const nextBoard = board.map(subBoard => subBoard.board.slice());
@@ -51,21 +59,30 @@ function UltimateTicTacToe() {
         nextUltBoard[boardIndex] = {
             board: nextBoard[boardIndex],
             winner: winner
-        } as BoardWithCachedWinner;
+        }
 
         setBoard(nextUltBoard);
         setXIsNext(!xIsNext);
+
+        const ultWinner = calculateTicTacToeWinner(simplifiedUltimateBoard(board))
+        if (ultWinner) {
+            disabled = true
+            setUltimateWinner(ultWinner)
+        }
     }
 
 
 
     return (
         <div>
+            <div className="text-xl font-bold" data-testid="ultimate-winner">
+                {ultimateWinner ? `${ultimateWinner} is the ultimate winner!` : "Who will be the ultimate winner?"}
+            </div>
             <WinCounter xWins={xWins} oWins={oWins}/>
-            <div className="inline-grid grid-cols-3 grid-rows-3" data-testid="ultimate-tictactoe">
+            <div className="inline-grid grid-cols-3 grid-rows-3" data-testid="ultimate-board">
                 {board.map((subBoard, boardIndex) => (
                     <div className="border-8" key={boardIndex}>
-                        <Board onSquareClick={(squareIndex) => handleClick(boardIndex, squareIndex)} squares={subBoard.board} disabled={subBoard.winner !== null}/>
+                        <Board onSquareClick={(squareIndex) => handleClick(boardIndex, squareIndex)} squares={subBoard.board} disabled={ultimateWinner ? true : subBoard.winner !== null}/>
                     </div>
                 ))}
             </div>

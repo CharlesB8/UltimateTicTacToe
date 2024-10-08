@@ -10,8 +10,8 @@ interface BoardProps {
 function Board({ squares, onSquareClick, disabled = false }: BoardProps) {
 
     return (
-        <div className='flex justify-center' data-testid='tictactoe-board'>
-            <div className={classNames('board', {'is-disabled': disabled})}>
+        <div className='flex justify-center'>
+            <div className={classNames('board', {'is-disabled': disabled})} data-testid='tictactoe-board'>
                 <div className='flex'>
                     <Square value={squares[0]} onSquareClick={() => onSquareClick(0)} disabled={disabled}/>
                     <Square value={squares[1]} onSquareClick={() => onSquareClick(1)} disabled={disabled}/>

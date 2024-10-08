@@ -1,4 +1,4 @@
-function calculateTicTacToeWinner(squares: Array<string | null>) {
+function calculateTicTacToeWinner(squares: Array<"X" | "O" | null>) {
     const winningCombos = [
         [0, 1, 2],
         [3, 4, 5],

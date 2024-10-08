@@ -43,7 +43,7 @@ function TicTacToe() {
     useEffect(() => {
         if (winner === "X") {
             setXWins((prevXWins) => prevXWins + 1);
-        } else if (winner === "O") {
+        } else if (winner === "O") {/**/
             setOWins((prevOWins) => prevOWins + 1);
         }
     }, [winner]);
@@ -56,9 +56,9 @@ function TicTacToe() {
     return (
         <>
             <div className='status' data-testid='status'>{status}</div>
-            <Board squares={squares} onSquareClick={handleClick} />
-            <ResetButton onReset={reset} />
-            <WinCounter xWins={xWins} oWins={oWins} />
+            <Board squares={squares} onSquareClick={handleClick}/>
+            <ResetButton onReset={reset}/>
+            <WinCounter xWins={xWins} oWins={oWins}/>
         </>
     )
 }

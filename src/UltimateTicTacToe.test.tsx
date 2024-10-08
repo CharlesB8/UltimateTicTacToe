@@ -6,7 +6,7 @@ beforeEach( () => {
 });
 
 it('renders a tic tac toe board', () => {
-   const ticTacToeBoard = screen.getByTestId('ultimate-tictactoe');
+   const ticTacToeBoard = screen.getByTestId('ultimate-board');
 
    expect(ticTacToeBoard).toBeTruthy();
 });
@@ -60,32 +60,65 @@ test("Per board won is tracked", () => {
 });
 
 test("X can win the ultimate board", () => {
-    const status = screen.getByTestId("x-wins")
-    // const ultimateWinner = screen.getByTestId("ultimate-winner")
+    const xWins = screen.getByTestId("x-wins")
+    const ultimateWinner = screen.getByTestId("ultimate-winner")
     const subBoards = screen.getAllByTestId('tictactoe-board');
     const subBoard1 = within(subBoards[0]).getAllByTestId('square')
     const subBoard2 = within(subBoards[1]).getAllByTestId('square')
     const subBoard3 = within(subBoards[2]).getAllByTestId('square')
     const subBoard4 = within(subBoards[3]).getAllByTestId('square')
 
+    expect(ultimateWinner.textContent).toContain("Who will be the ultimate winner?")
+
     xWinsBoard(subBoard1)
-    expect(status.textContent).toContain("1")
+    expect(xWins.textContent).toContain("1")
 
     fireEvent.click(subBoard4[1]); // Play O somewhere
     xWinsBoard(subBoard2)
-    expect(status.textContent).toContain("2")
+    expect(xWins.textContent).toContain("2")
 
     fireEvent.click(subBoard4[2]); // Play O somewhere
     xWinsBoard(subBoard3)
-    expect(status.textContent).toContain("3")
+    expect(xWins.textContent).toContain("3")
 
-    // expect(ultimateWinner)
+    expect(ultimateWinner.textContent).toContain("X is the ultimate winner")
+});
+
+test("The ultimate board becomes disabled after a winner is declared", () => {
+    const xWins = screen.getByTestId("x-wins")
+    const ultimateWinner = screen.getByTestId("ultimate-winner")
+    const subBoards = screen.getAllByTestId('tictactoe-board');
+    const subBoard1 = within(subBoards[0]).getAllByTestId('square')
+    const subBoard2 = within(subBoards[1]).getAllByTestId('square')
+    const subBoard3 = within(subBoards[2]).getAllByTestId('square')
+    const subBoard4 = within(subBoards[3]).getAllByTestId('square')
+
+    const everySquare = screen.getAllByTestId('square')
+
+    expect(ultimateWinner.textContent).toContain("Who will be the ultimate winner?")
+
+    xWinsBoard(subBoard1)
+    expect(xWins.textContent).toContain("1")
+
+    fireEvent.click(subBoard4[1]); // Play O somewhere
+    xWinsBoard(subBoard2)
+    expect(xWins.textContent).toContain("2")
+
+    fireEvent.click(subBoard4[2]); // Play O somewhere
+    xWinsBoard(subBoard3)
+    expect(xWins.textContent).toContain("3")
+
+    expect(ultimateWinner.textContent).toContain("X is the ultimate winner")
+
+    everySquare.forEach( square => {
+        expect(square).toBeDisabled()
+    });
 });
 
 function xWinsBoard(subBoard: HTMLElement[]) {
-    fireEvent.click(subBoard[0]);
-    fireEvent.click(subBoard[3]);
-    fireEvent.click(subBoard[1]);
-    fireEvent.click(subBoard[4]);
-    fireEvent.click(subBoard[2]);
+    fireEvent.click(subBoard[0]); // X turn
+    fireEvent.click(subBoard[3]); // O turn
+    fireEvent.click(subBoard[1]); // X turn
+    fireEvent.click(subBoard[4]); // O turn
+    fireEvent.click(subBoard[2]); // X turn
 }

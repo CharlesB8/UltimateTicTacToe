@@ -1,4 +1,5 @@
 import './Square.css'
+import classNames from "classnames";
 
 interface SquareProps {
     value: string | null;
@@ -17,7 +18,10 @@ function Square({ value, onSquareClick, disabled = false }: SquareProps) {
 
     return (
         <button
-            className='square hover:bg-orange-400'
+            className={classNames('square hover:bg-gray-300', {
+                "text-sky-700": value == "O",
+                "text-rose-700": value == "X"
+            })}
             data-testid='square'
             onClick={handleClick}
             disabled={disabled}
