@@ -2,12 +2,14 @@ import Board from "./components/Board";
 import {useEffect, useState} from "react";
 import calculateTicTacToeWinner from "./calculateTicTacToeWinner";
 import WinCounter from "./components/WinCounter";
+import {i} from "vite/dist/node/types.d-aGj9QkWt";
 
 function createBoard() {
     return Array(9).fill(null).map<BoardWithCachedWinner>(() => {
         return {
             board: Array(9).fill(null),
-            winner: null
+            winner: null,
+            disabled: false
         }
     });
 }
@@ -15,6 +17,7 @@ function createBoard() {
 interface BoardWithCachedWinner {
     board: BoardType;
     winner: "X" | "O" | "" | null
+    disabled: boolean
 }
 
 type BoardType = Array<"X" | "O" | null>
@@ -29,16 +32,13 @@ function simplifiedUltimateBoard(board: BoardWithCachedWinner[]) {
     });
 }
 
-interface UltimateTicTacToeProps {
-    disabled?: boolean
-}
-
-function UltimateTicTacToe({ disabled = false }: UltimateTicTacToeProps) {
+function UltimateTicTacToe() {
     const [xIsNext, setXIsNext] = useState(true);
     const [board, setBoard] = useState<Array<BoardWithCachedWinner>>(createBoard());
     const [xWins, setXWins] = useState(0);
     const [oWins, setOWins] = useState(0);
     const [ultimateWinner, setUltimateWinner] = useState<string | null>(null);
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     function handleClick(boardIndex: number, squareIndex: number) {
 
@@ -58,7 +58,16 @@ function UltimateTicTacToe({ disabled = false }: UltimateTicTacToeProps) {
 
         nextUltBoard[boardIndex] = {
             board: nextBoard[boardIndex],
-            winner: winner
+            winner: winner,
+            disabled: winner !== null
+        }
+
+        for (let i = 0; i < board.length; i++) {
+            if (i !== squareIndex) {
+                nextUltBoard[i].disabled = true
+            } else {
+                nextUltBoard[i].disabled = false
+            }
         }
 
         setBoard(nextUltBoard);
@@ -66,7 +75,7 @@ function UltimateTicTacToe({ disabled = false }: UltimateTicTacToeProps) {
 
         const ultWinner = calculateTicTacToeWinner(simplifiedUltimateBoard(board))
         if (ultWinner) {
-            disabled = true
+            setDisabled(true)
             setUltimateWinner(ultWinner)
         }
     }
@@ -82,7 +91,11 @@ function UltimateTicTacToe({ disabled = false }: UltimateTicTacToeProps) {
             <div className="inline-grid grid-cols-3 grid-rows-3" data-testid="ultimate-board">
                 {board.map((subBoard, boardIndex) => (
                     <div className="border-8" key={boardIndex}>
-                        <Board onSquareClick={(squareIndex) => handleClick(boardIndex, squareIndex)} squares={subBoard.board} disabled={ultimateWinner ? true : subBoard.winner !== null}/>
+                        <Board
+                            onSquareClick={(squareIndex) => handleClick(boardIndex, squareIndex)}
+                            squares={subBoard.board}
+                            disabled={disabled ? true : subBoard.disabled}
+                        />
                     </div>
                 ))}
             </div>

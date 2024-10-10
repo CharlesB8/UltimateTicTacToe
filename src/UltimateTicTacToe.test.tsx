@@ -115,6 +115,22 @@ test("The ultimate board becomes disabled after a winner is declared", () => {
     });
 });
 
+test("If x plays in the top left square of a sub board, o must play in the top left square of the ultimate board", () =>{
+    const subBoards = screen.getAllByTestId('tictactoe-board');
+    const subBoard0 = within(subBoards[0]).getAllByTestId('square')
+    const subBoard2 = within(subBoards[2]).getAllByTestId('square')
+
+    /*
+    * |0|1|2|
+    * |3|4|5|
+    * |6|7|8|
+    * */
+    fireEvent.click(subBoard0[1]); // x top left sub board in the center middle
+    fireEvent.click(subBoard2[1]); // O plays illegally in top right
+
+    expect(subBoard2[1].textContent).toBe("")
+});
+
 function xWinsBoard(subBoard: HTMLElement[]) {
     fireEvent.click(subBoard[0]); // X turn
     fireEvent.click(subBoard[3]); // O turn
