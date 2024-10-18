@@ -62,11 +62,21 @@ function UltimateTicTacToe() {
             disabled: winner !== null
         }
 
-        for (let i = 0; i < board.length; i++) {
-            if (i !== squareIndex) {
-                nextUltBoard[i].disabled = true
-            } else {
-                nextUltBoard[i].disabled = false
+        if (nextUltBoard[boardIndex].winner) {
+            board.forEach(board => {
+                if (board.winner) {
+                    board.disabled = true
+                } else {
+                    board.disabled = false
+                }
+            })
+        } else {
+            for (let i = 0; i < board.length; i++) {
+                if (i !== squareIndex || nextUltBoard[i].winner){
+                    nextUltBoard[i].disabled = true
+                } else {
+                    nextUltBoard[i].disabled = false
+                }
             }
         }
 
