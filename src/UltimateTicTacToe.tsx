@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import calculateTicTacToeWinner from "./calculateTicTacToeWinner";
 import WinCounter from "./components/WinCounter";
 import {i} from "vite/dist/node/types.d-aGj9QkWt";
+import square from "./components/Square";
 
 function createBoard() {
     return Array(9).fill(null).map<BoardWithCachedWinner>(() => {
@@ -62,7 +63,8 @@ function UltimateTicTacToe() {
             disabled: winner !== null
         }
 
-        if (nextUltBoard[boardIndex].winner) {
+
+        if (nextUltBoard[boardIndex].winner || nextUltBoard[squareIndex].winner) {
             board.forEach(board => {
                 if (board.winner) {
                     board.disabled = true
@@ -72,10 +74,10 @@ function UltimateTicTacToe() {
             })
         } else {
             for (let i = 0; i < board.length; i++) {
-                if (i !== squareIndex || nextUltBoard[i].winner){
-                    nextUltBoard[i].disabled = true
-                } else {
+                if (i === squareIndex){
                     nextUltBoard[i].disabled = false
+                } else {
+                    nextUltBoard[i].disabled = true
                 }
             }
         }
