@@ -51,27 +51,20 @@ function UltimateTicTacToe() {
     function handleClick(boardIndex: number, squareIndex: number) {
 
         const nextUltBoard = [...board];
-        const nextSubBoard = [...nextUltBoard[boardIndex].board];
+        const nextSubBoard = nextUltBoard[boardIndex];
 
         const currentPlayer = xIsNext ? "X" : "O";
-        nextSubBoard[squareIndex] = currentPlayer;
 
-        const winner = calculateTicTacToeWinner(nextSubBoard)
+        nextSubBoard.board[squareIndex] = currentPlayer;
+        nextSubBoard.winner = calculateTicTacToeWinner(nextSubBoard.board)
+        setWins(nextSubBoard.winner)
+        nextSubBoard.disabled = nextSubBoard.winner !== null;
 
-        setWins(winner)
+        const subPlayOnSuper = nextUltBoard[squareIndex]
 
-        nextUltBoard[boardIndex] = {
-            board: nextSubBoard,
-            winner: winner,
-            disabled: winner !== null
-        }
-
-
-        if (nextUltBoard[boardIndex].winner || nextUltBoard[squareIndex].winner) {
+        if (subPlayOnSuper.winner) {
             board.forEach(board => {
-                if (board.winner) {
-                    board.disabled = true
-                } else {
+                if (!board.winner) {
                     board.disabled = false
                 }
             })
@@ -84,6 +77,8 @@ function UltimateTicTacToe() {
                 }
             }
         }
+
+
 
         setBoard(nextUltBoard);
         setXIsNext(!xIsNext);
