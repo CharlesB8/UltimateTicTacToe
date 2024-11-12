@@ -39,25 +39,29 @@ function UltimateTicTacToe() {
     const [ultimateWinner, setUltimateWinner] = useState<string | null>(null);
     const [disabled, setDisabled] = useState<boolean>(false);
 
-    function handleClick(boardIndex: number, squareIndex: number) {
-
-        const nextUltBoard = [...board];
-        const nextBoard = [...nextUltBoard[boardIndex].board];
-        const currentPlayer = xIsNext ? "X" : "O";
-
-        nextBoard[squareIndex] = currentPlayer;
-
-        const winner = calculateTicTacToeWinner(nextBoard)
-
-
+    function setWins(winner: "X" | "O" | "" | null) {
         if (winner === "X") {
             setXWins((prevXWins) => prevXWins + 1);
         } else if (winner === "O") {
             setOWins((prevOWins) => prevOWins + 1);
         }
+    }
+
+
+    function handleClick(boardIndex: number, squareIndex: number) {
+
+        const nextUltBoard = [...board];
+        const nextSubBoard = [...nextUltBoard[boardIndex].board];
+
+        const currentPlayer = xIsNext ? "X" : "O";
+        nextSubBoard[squareIndex] = currentPlayer;
+
+        const winner = calculateTicTacToeWinner(nextSubBoard)
+
+        setWins(winner)
 
         nextUltBoard[boardIndex] = {
-            board: nextBoard,
+            board: nextSubBoard,
             winner: winner,
             disabled: winner !== null
         }
@@ -72,7 +76,7 @@ function UltimateTicTacToe() {
                 }
             })
         } else {
-            for (let i = 0; i < board.length; i++) {
+            for (let i = 0; i < nextUltBoard.length; i++) {
                 if (i === squareIndex){
                     nextUltBoard[i].disabled = false
                 } else {

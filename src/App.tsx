@@ -1,6 +1,6 @@
 import {Route, Routes} from "react-router-dom";
 import TicTacToe from "./TicTacToe";
-import UltimateTicTacToe from "./UltimateTicTacToe.tsx";
+import UltimateTicTacToe from "./UltimateTicTacToe";
 
 const App = () => {
     return (
