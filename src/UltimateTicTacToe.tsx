@@ -1,9 +1,7 @@
 import Board from "./components/Board";
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import calculateTicTacToeWinner from "./calculateTicTacToeWinner";
 import WinCounter from "./components/WinCounter";
-import {i} from "vite/dist/node/types.d-aGj9QkWt";
-import square from "./components/Square";
 
 function createBoard() {
     return Array(9).fill(null).map<BoardWithCachedWinner>(() => {
@@ -43,12 +41,13 @@ function UltimateTicTacToe() {
 
     function handleClick(boardIndex: number, squareIndex: number) {
 
-        const nextUltBoard = board
-        const nextBoard = board.map(subBoard => subBoard.board.slice());
+        const nextUltBoard = [...board];
+        const nextBoard = [...nextUltBoard[boardIndex].board];
+        const currentPlayer = xIsNext ? "X" : "O";
 
-        nextBoard[boardIndex][squareIndex] = xIsNext ? "X" : "O";
+        nextBoard[squareIndex] = currentPlayer;
 
-        const winner = calculateTicTacToeWinner(nextBoard[boardIndex])
+        const winner = calculateTicTacToeWinner(nextBoard)
 
 
         if (winner === "X") {
@@ -58,7 +57,7 @@ function UltimateTicTacToe() {
         }
 
         nextUltBoard[boardIndex] = {
-            board: nextBoard[boardIndex],
+            board: nextBoard,
             winner: winner,
             disabled: winner !== null
         }
@@ -85,7 +84,7 @@ function UltimateTicTacToe() {
         setBoard(nextUltBoard);
         setXIsNext(!xIsNext);
 
-        const ultWinner = calculateTicTacToeWinner(simplifiedUltimateBoard(board))
+        const ultWinner = calculateTicTacToeWinner(simplifiedUltimateBoard(nextUltBoard))
         if (ultWinner) {
             setDisabled(true)
             setUltimateWinner(ultWinner)
