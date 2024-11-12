@@ -1,5 +1,5 @@
 import Board from "./components/Board";
-import { useState } from "react";
+import {useState} from "react";
 import calculateTicTacToeWinner from "./calculateTicTacToeWinner";
 import WinCounter from "./components/WinCounter";
 
@@ -22,7 +22,7 @@ interface BoardWithCachedWinner {
 type BoardType = Array<"X" | "O" | null>
 
 function simplifiedUltimateBoard(board: BoardWithCachedWinner[]) {
-    return board.map(subBoard =>  {
+    return board.map(subBoard => {
         if (!subBoard.winner) {
             return null;
         } else {
@@ -47,6 +47,24 @@ function UltimateTicTacToe() {
         }
     }
 
+    function determineLegalPlays(board: BoardWithCachedWinner[], squareIndex: number) {
+        const subPlayOnSuper = board[squareIndex]
+
+        if (subPlayOnSuper.winner) {
+            // enable all boards if super play would be illegal
+            board.forEach(board => {
+                if (!board.winner) {
+                    board.disabled = false
+                }
+            })
+        } else {
+            // disable every board that is not the last sub play
+            for (let i = 0; i < board.length; i++) {
+                board[i].disabled = (i !== squareIndex)
+            }
+        }
+    }
+
 
     function handleClick(boardIndex: number, squareIndex: number) {
 
@@ -60,25 +78,7 @@ function UltimateTicTacToe() {
         setWins(nextSubBoard.winner)
         nextSubBoard.disabled = nextSubBoard.winner !== null;
 
-        const subPlayOnSuper = nextUltBoard[squareIndex]
-
-        if (subPlayOnSuper.winner) {
-            board.forEach(board => {
-                if (!board.winner) {
-                    board.disabled = false
-                }
-            })
-        } else {
-            for (let i = 0; i < nextUltBoard.length; i++) {
-                if (i === squareIndex){
-                    nextUltBoard[i].disabled = false
-                } else {
-                    nextUltBoard[i].disabled = true
-                }
-            }
-        }
-
-
+        determineLegalPlays(nextUltBoard, squareIndex)
 
         setBoard(nextUltBoard);
         setXIsNext(!xIsNext);
@@ -89,7 +89,6 @@ function UltimateTicTacToe() {
             setUltimateWinner(ultWinner)
         }
     }
-
 
 
     return (
