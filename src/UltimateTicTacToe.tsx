@@ -47,36 +47,32 @@ function UltimateTicTacToe() {
         }
     }
 
-    function determineLegalPlays(board: BoardWithCachedWinner[], squareIndex: number) {
-        const subPlayOnSuper = board[squareIndex]
+    function determineLegalPlays(nextUltBoard: BoardWithCachedWinner[], squareIndex: number) {
+        const subPlayOnSuper = nextUltBoard[squareIndex]
 
-        if (subPlayOnSuper.winner) {
-            // enable all boards if super play would be illegal
-            board.forEach(board => {
-                if (!board.winner) {
-                    board.disabled = false
-                }
-            })
-        } else {
-            // disable every board that is not the last sub play
-            for (let i = 0; i < board.length; i++) {
-                board[i].disabled = (i !== squareIndex)
+        nextUltBoard.forEach(subBoard => {
+            subBoard.disabled = boardIsWinner(subBoard)
+
+            if (!subPlayOnSuper.winner) {
+                subBoard.disabled = subBoard !== subPlayOnSuper
             }
-        }
+        })
+    }
+
+    function boardIsWinner(subBoard: BoardWithCachedWinner) {
+        return subBoard.winner !== null
     }
 
 
     function handleClick(boardIndex: number, squareIndex: number) {
-
+        const currentPlayer = xIsNext ? "X" : "O";
         const nextUltBoard = [...board];
         const nextSubBoard = nextUltBoard[boardIndex];
 
-        const currentPlayer = xIsNext ? "X" : "O";
 
         nextSubBoard.board[squareIndex] = currentPlayer;
         nextSubBoard.winner = calculateTicTacToeWinner(nextSubBoard.board)
         setWins(nextSubBoard.winner)
-        nextSubBoard.disabled = nextSubBoard.winner !== null;
 
         determineLegalPlays(nextUltBoard, squareIndex)
 
