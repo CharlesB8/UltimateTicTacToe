@@ -23,13 +23,9 @@ interface BoardWithCachedWinner {
 
 type BoardType = Array<"X" | "O" | null>
 
-<<<<<<< Updated upstream
-function simplifiedUltimateBoard(board: BoardWithCachedWinner[]) {
-    return board.map(subBoard =>  {
-=======
+
 function simplifiedUltimateBoard(board: BoardWithCachedWinner[]): BoardType {
     return board.map(subBoard => {
->>>>>>> Stashed changes
         if (!subBoard.winner) {
             return null;
         } else {
