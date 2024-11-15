@@ -1,33 +1,64 @@
-Objective:
-Demystify a seemingly difficult refactor through a methodical line by line approach that leans on passing tests.
+# Ultimate Tic-Tac-Toe Workshop
 
-# Intro to TypeScript:
-(Skip if room feels confident in TypeScript)
+## Objective
 
-## JS vs. TS
-TypeScript is a super set of JavaScript. Everything JavaScript can do TypeScript can.
+Demystify a seemingly difficult refactor through a methodical line-by-line approach that leans on passing tests.
+
+## What is Ultimate Tic-Tac-Toe?
+
+Great question! Check out these [rules](https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe)!
+
+## Introduction to Typescript
+
+Feel free to skip this section if you are already confident in TS
+
+<details>
+<summary>Typescript Overview</summary>
+<br>
+
+#### JS vs. TS
+
+TypeScript is a super set of JavaScript.
+Everything JavaScript can do TypeScript can.
 
 - JS = Dynamic type
 - TS = Static type
     - TS can allow both
-      
+- go through example program
+
 Typescript compiles to javascript.
+
 - When you compile a TS program is when you run into errors
 
-Compile ts file with errors and show that it still executes the compiled JavaScript
+Compile TS file with errors and show that it still executes the compiled JavaScript
+
 ```bash
-tsc example.ts
-node example.js
+tsc ./example/multiply.ts
+node ./example/multiply.js
+```
+</details>
+
+## Running the Project
+
+To get started:
+
+```bash
+cd ./workshops/ultimate-tic-tac-toe
+yarn install
+yarn run dev
+yarn test
 ```
 
-# Ultimate Tic Tac Toe:
+Open your browser and navigate to `localhost:5173/ultimate`.
 
-- Open project in browser and introduce rules
+_NOTE: The rest of this README are notes for the presenter. If you aren't there for the workshop, too bad... You missed a good one._
 
 ## Intro to refactoring:
-- We are going to be mainly working in the `handleClick` method of `UltimateTicTacToe.tsx`
-- We are going to refactor this puppy using clean code principles and good TypeScript practices
-- Overview of some existing structures
+
+1. We are going to be mainly working in the `handleClick` method of [UltimateTicTacToe](./src/UltimateTicTacToe.tsx).
+2. We are going to refactor this puppy using clean code principles and good TypeScript practices
+
+- Overview of the file
     - introduce the TypeScript structures in the file
         - BoardWithCachedWinner interface
             - The Ultimate board array is full of these see `createBoard`
@@ -40,10 +71,11 @@ node example.js
 ### Program was written TDD:
 - This is to our advantage as the refactorers.
 - We can now confidently make changes to the program knowing our tests will catch us
-- This isn’t a test writing workshop, so you shouldn’t need to write any tests.
+- This isn’t a test writing workshop, so you **shouldn’t need to write any tests**.
     - No change you make should make the tests break
+        - this is a refactoring principnle, if you are adding functionality you aren't refactoring
         - If you break the tests undo your last change until they are working again
-- Use `yarn test —watch`
+- Use `yarn test --watch`
 
 ## Goal for this refactor
 Reduce `handleClick` method line count:
@@ -54,24 +86,36 @@ Reduce `handleClick` method line count:
 #### Calculating sub board win
 Let’s look at the first few lines of our function.
 - Problem: board should be treated as immutable
-- Problem: what even is the `nextBoard` array?
-    - we don't need access to every board in the array, just the subBoard we are change with the click
-- `nextBoard[boardIndex][squareIndex] = xIsNext ? "X" : “O”;` is hard to read and I’m not sure if I understand what it’s doing
+- Problem: What are the differences between these two board variables
+    - We only need one of these board arrays, and it should respect the immutability of state
+- `nextBoard[boardIndex][squareIndex] = xIsNext ? "X" : “O”;` we could change this if it's confusing
 
 ```ts
 const currentPlayer = xIsNext ? "X" : "O";
-const nextUltBoard: BoardWithCachedWinner[] = [...board];
-const nextSubBoard: BoardWithCachedWinner = nextUltBoard[boardIndex];
+const nextUltBoard: BoardWithCachedWinner[] = board.map(subBoard => ({
+    ...subBoard, // create copy of object
+    board: [...subBoard.board] // create copy of board
+}));
+const clickedSubBoard: BoardWithCachedWinner = nextUltBoard[boardIndex]; // making a ref because we need to change this boards state
 
-nextSubBoard.board[squareIndex] = currentPlayer;
+clickedSubBoard.board[squareIndex] = currentPlayer;
 ```
 
 `board` should be treated as immutable, so let's remove references to that
 
+#### Setting subBoard state
+- set each reference on the board direct
+```ts
+clickedSubBoard.board[squareIndex] = currentPlayer
+clickedSubBoard.winner = calculateTicTacToeWinner(clickedSubBoard.board)
+clickedSubBoard.disabled = clickedSubBoard.winner !== null
+setWins(clickedSubBoard.winner)
+```
+
 #### Pull out win if else
 - What’s this doing?
     - It is incrementing wins
-    
+
 Let’s pull this logic out into a method.
 
 #### Branches in loops in branches... Why?
@@ -129,9 +173,9 @@ if (board.winner) {
 ```
 Reduce to
 ```ts
-board.disabled = board.winner
+board.disabled = board.winner !== null
 ```
-
+Next if else
 ```ts
 // this is also a boolean setting a boolean. But what are we really asking here?
 if (i === squareIndex){
@@ -140,15 +184,10 @@ if (i === squareIndex){
     nextUltBoard[i].disabled = true
 }
 ```
+Let's try inlining this one
 ```ts
-// shorter, but definitely doesn't read well
-nextUltBoard[i].disabled = nextUltBoard[i] !== (i === squareIndex)
-```
-```ts
-// Again what are we actually asking here?
-// Does the subBoard index equal the clicked square index
-nextLegalPlay = nextUltBoard[squareIndex]
-nextUltBoard[i].disabled = nextUltBoard[i] !== nextLegalPlay
+// shorter, but doesn't read great
+nextUltBoard[i].disabled = i !== squareIndex
 ```
 
 with these simplified it's looking easier to combine the loop than ever. But now that the loop bodies are reduced we need to answer the question of the first if
@@ -162,7 +201,7 @@ if (nextUltBoard[boardIndex].winner || nextLegalPlay.winner) {
     })
 } else {
     for (let i = 0; i < board.length; i++) {
-        nextUltBoard[i].disabled = nextUltBoard[i] !== nextLegalPlay
+        nextUltBoard[i].disabled = i !== squareIndex
     }
 }
 ```
@@ -181,8 +220,8 @@ if (nextLegalPlay.winner) {
     }
 }
 ```
-Now you can see that we aren't asking the right question. We don't need to know if the board is a winner we need to know if the board is not a winner. 
-That way we can enable it if there is an exception to the normal rules. 
+Now you can see that we aren't asking the right question. We don't need to know if the board is a winner we need to know if the board is not a winner.
+That way we can enable it if there is an exception to the normal rules.
 ```ts
 nextLegalPlay = nextUltBoard[squareIndex]
 
@@ -212,7 +251,3 @@ function determineLegalPlays(nextUltBoard: BoardWithCachedWinner[], squareIndex:
     })
 }
 ```
-
-
-
-
